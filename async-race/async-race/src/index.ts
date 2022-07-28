@@ -1,5 +1,6 @@
 import App from './components/app';
+import { GETCARS } from './components/constants';
 import './index.css';
 
-const app = new App();
+export const app = new App();
 app.start();

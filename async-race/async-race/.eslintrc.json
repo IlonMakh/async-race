@@ -17,6 +17,7 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "indent": "off"
+        "indent": "off",
+        "no-console": "off"
     }
 }
