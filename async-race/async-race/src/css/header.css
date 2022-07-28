@@ -1,0 +1,23 @@
+header {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin: 30px;
+}
+
+header button {
+    width: 120px;
+    height: 30px;
+    text-transform: uppercase;
+    border-radius: 9px;
+    border: 1px solid green;
+    background-color: rgb(89, 238, 69);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+header button:hover {
+    background-color: rgb(130, 238, 144);
+}
