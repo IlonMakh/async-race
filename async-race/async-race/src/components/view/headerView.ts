@@ -1,7 +1,7 @@
 import '../../css/header.css';
 
 export default class HeaderView {
-    body;
+    body: HTMLElement;
 
     constructor() {
         this.body = document.body;
