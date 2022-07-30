@@ -39,7 +39,7 @@ export default class GarageView {
                     </div>
                 <div class='car_road'></div>
         </div>`;
-        pagination!.insertAdjacentHTML('beforebegin', carHTML);
+        (pagination as HTMLElement).insertAdjacentHTML('beforebegin', carHTML);
     }
 
     drawPagination() {
@@ -49,6 +49,6 @@ export default class GarageView {
             <button class='pagination_prev'>prev</button>
             <button class='pagination_next'>next</button>
         </div>`;
-        garage!.insertAdjacentHTML('beforeend', paginationHTML);
+        (garage as HTMLElement).insertAdjacentHTML('beforeend', paginationHTML);
     }
 }
