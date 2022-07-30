@@ -15,6 +15,7 @@ export default class GarageView {
         <div class='garage'>
             <h3 class='garage_title'>Garage</h3>
             <div class='garage_page'>Page</div>
+            <div class='garage_cars'></div>
         </div>
         `;
         this.body.insertAdjacentHTML('beforeend', garageHTML);
@@ -23,7 +24,7 @@ export default class GarageView {
     }
 
     drawCars(car: ICar) {
-        const pagination = this.body.querySelector('.garage_pagination');
+        const cars = this.body.querySelector('.garage_cars');
         const carHTML = `
         <div class='car' id='${car.id}'>
                 <div class='car_selection'>
@@ -39,7 +40,7 @@ export default class GarageView {
                     </div>
                 <div class='car_road'></div>
         </div>`;
-        (pagination as HTMLElement).insertAdjacentHTML('beforebegin', carHTML);
+        (cars as HTMLElement).insertAdjacentHTML('afterbegin', carHTML);
     }
 
     drawPagination() {

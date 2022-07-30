@@ -1,9 +1,9 @@
 import { app } from '../index';
 import { ICar, IWinner } from '../types/index';
 
-const SERVER = 'http://127.0.0.1:3000';
-const CARS = '/garage';
-const WINNERS = '/winners';
+export const SERVER = 'http://127.0.0.1:3000';
+export const CARS = '/garage';
+export const WINNERS = '/winners';
 const carBrand = [
     'Acura',
     'Alfa Romeo',
@@ -174,8 +174,8 @@ const carModel = [
     'Solaris'
 ];
 
-const randomColor = () => '#' + (Math.random().toString(16) + '000000').substring(2, 8);
-const randomName = () => {
+export const randomColor = () => '#' + (Math.random().toString(16) + '000000').substring(2, 8);
+export const randomName = () => {
     const brandIndex = Math.floor(0 + Math.random() * (carBrand.length + 1 - 0));
     const modelIndex = Math.floor(0 + Math.random() * (carModel.length + 1 - 0));
     return `${carBrand[brandIndex]} ${carModel[modelIndex]}`;
@@ -184,7 +184,7 @@ const randomName = () => {
 export const GETCARS = async () => {
     const result = await fetch(`${SERVER}${CARS}`);
     const cars = await result.json();
-    return cars.forEach((car: ICar) => app.garage.drawCars(car));
+    return cars.reverse().forEach((car: ICar) => app.garage.drawCars(car));
 };
 
 /*
