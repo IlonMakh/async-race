@@ -1,4 +1,6 @@
-import { CARS, SERVER } from '../constants';
+import {
+    CARS, PAGE, SERVER
+} from '../constants';
 
 export default class CarModel {
     garage;
@@ -13,6 +15,14 @@ export default class CarModel {
         });
         const car = await response.json();
         return car;
+    }
+
+    async getCars() {
+        const response = await fetch(`${this.garage}?_page=${PAGE.number}&_limit=${PAGE.limit}`, {
+            method: 'GET'
+        });
+        const cars = await response.json();
+        return cars;
     }
 
     async createCar(body: object) {

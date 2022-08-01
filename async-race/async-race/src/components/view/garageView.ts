@@ -1,25 +1,43 @@
 import '../../css/garage.css';
 import { app } from '../../index';
 import { ICar } from '../../types/index';
-import { GETCARS } from '../constants';
+import { PAGE, TOTALCOUNT } from '../constants';
+import CarModel from '../model/carModel';
 
 export default class GarageView {
     body: HTMLElement;
 
+    carModel;
+
+    checkDisable;
+
     constructor() {
         this.body = document.body;
+        this.carModel = new CarModel();
+        this.checkDisable = async () => {
+            const prev: HTMLButtonElement = document.querySelector('.pagination_prev') as HTMLButtonElement;
+            const next: HTMLButtonElement = document.querySelector('.pagination_next') as HTMLButtonElement;
+            const count = await TOTALCOUNT();
+            prev.disabled = PAGE.number === 1;
+            next.disabled = Math.ceil(count / PAGE.limit) === PAGE.number || count <= 7;
+        };
     }
 
     drawGarage() {
         const garageHTML = `
         <div class='garage'>
-            <h3 class='garage_title'>Garage</h3>
-            <div class='garage_page'>Page</div>
+            <h3 class='garage_title'></h3>
+            <div class='garage_page'>Page #${PAGE.number}</div>
             <div class='garage_cars'></div>
         </div>
         `;
         this.body.insertAdjacentHTML('beforeend', garageHTML);
-        window.addEventListener('DOMContentLoaded', GETCARS);
+            window.addEventListener('DOMContentLoaded', async () => {
+            const garageTitle: HTMLElement = document.querySelector('.garage_title') as HTMLInputElement;
+            const cars = await this.carModel.getCars();
+            garageTitle.insertAdjacentHTML('beforeend', `Garage(${await TOTALCOUNT()})`);
+            return cars.forEach((car: ICar) => app.garage.drawCars(car));
+        });
         app.garage.drawPagination();
     }
 
@@ -40,14 +58,15 @@ export default class GarageView {
                     </div>
                 <div class='car_road'></div>
         </div>`;
-        (cars as HTMLElement).insertAdjacentHTML('afterbegin', carHTML);
+        (cars as HTMLElement).insertAdjacentHTML('beforeend', carHTML);
+        this.checkDisable();
     }
 
-    drawPagination() {
+    async drawPagination() {
         const garage = this.body.querySelector('.garage');
         const paginationHTML = `
         <div class='garage_pagination'>
-            <button class='pagination_prev'>prev</button>
+            <button disabled class='pagination_prev'>prev</button>
             <button class='pagination_next'>next</button>
         </div>`;
         (garage as HTMLElement).insertAdjacentHTML('beforeend', paginationHTML);

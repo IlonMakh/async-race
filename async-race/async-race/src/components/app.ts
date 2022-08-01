@@ -46,5 +46,6 @@ export default class App {
         this.settingsControllers.listenUpdateBtn();
         this.garageControllers.listenRemoveBtn();
         this.garageControllers.listenSelectBtn();
+        this.garageControllers.listenPagination();
     }
 }

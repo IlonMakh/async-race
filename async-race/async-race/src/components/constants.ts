@@ -4,6 +4,11 @@ import { ICar, IWinner } from '../types/index';
 export const SERVER = 'http://127.0.0.1:3000';
 export const CARS = '/garage';
 export const WINNERS = '/winners';
+export const PAGE = { number: 1, limit: 7 };
+export const TOTALCOUNT = async () => {
+    const response = await fetch(`${SERVER}${CARS}?_page=${PAGE.number}&_limit=${PAGE.limit}`);
+    return Number(response.headers.get('X-Total-Count'));
+};
 const carBrand = [
     'Acura',
     'Alfa Romeo',
@@ -181,12 +186,6 @@ export const randomName = () => {
     return `${carBrand[brandIndex]} ${carModel[modelIndex]}`;
 };
 
-export const GETCARS = async () => {
-    const result = await fetch(`${SERVER}${CARS}`);
-    const cars = await result.json();
-    return cars.reverse().forEach((car: ICar) => app.garage.drawCars(car));
-};
-
 /*
 export const GETWINNERS = async () => {
     const result = await fetch(`${SERVER}${WINNERS}`);
@@ -215,6 +214,5 @@ export const GETINFO = async () => {
 export default {
     SERVER,
     CARS,
-    WINNERS,
-    GETCARS
+    WINNERS
 };
