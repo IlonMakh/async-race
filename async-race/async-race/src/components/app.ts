@@ -44,8 +44,11 @@ export default class App {
         this.settingsControllers.listenCreateBtn();
         this.settingsControllers.listenGenerateBtn();
         this.settingsControllers.listenUpdateBtn();
+        this.settingsControllers.listenResetBtn();
         this.garageControllers.listenRemoveBtn();
         this.garageControllers.listenSelectBtn();
         this.garageControllers.listenPagination();
+        this.garageControllers.listenStart();
+        this.garageControllers.listenStop();
     }
 }

@@ -1,9 +1,12 @@
 import { app } from '../index';
-import { ICar, IWinner } from '../types/index';
+import {
+    ICar, IDrive, IWinner, rafid
+} from '../types/index';
 
 export const SERVER = 'http://127.0.0.1:3000';
 export const CARS = '/garage';
 export const WINNERS = '/winners';
+export const ENGINE = '/engine';
 export const PAGE = { number: 1, limit: 7 };
 export const TOTALCOUNT = async () => {
     const response = await fetch(`${SERVER}${CARS}?_page=${PAGE.number}&_limit=${PAGE.limit}`);
@@ -184,6 +187,26 @@ export const randomName = () => {
     const brandIndex = Math.floor(0 + Math.random() * (carBrand.length + 1 - 0));
     const modelIndex = Math.floor(0 + Math.random() * (carModel.length + 1 - 0));
     return `${carBrand[brandIndex]} ${carModel[modelIndex]}`;
+};
+
+export const RAFID: rafid = {};
+
+export const animateCar = (id: string, car: HTMLElement, driveParams: IDrive) => {
+    const elem = car.querySelector('.move_icon') as HTMLElement;
+    let currentX = (<HTMLElement>elem).offsetLeft;
+    const endX = window.screen.width - 230;
+    const duration = (<IDrive>driveParams).distance / (<IDrive>driveParams).velocity;
+    const framesCount = (duration / 1000) * 60;
+    const dX = (endX - (<HTMLElement>elem).offsetLeft) / framesCount;
+
+        const move = () => {
+            currentX += dX;
+            elem.style.transform = `translateX(${currentX}px)`;
+            if (currentX < endX) {
+                RAFID[`${id}`] = requestAnimationFrame(move);
+            }
+        };
+        move();
 };
 
 /*

@@ -1,6 +1,8 @@
 import { app } from '../../index';
 import { ICar } from '../../types/index';
-import { randomColor, randomName, TOTALCOUNT } from '../constants';
+import {
+    RAFID, randomColor, randomName, TOTALCOUNT
+} from '../constants';
 import CarModel from '../model/carModel';
 
 export default class SettingsControllers {
@@ -60,6 +62,28 @@ export default class SettingsControllers {
                 target.removeAttribute('id');
                 this.updateCar(updatedCar, carName, carColor);
                 this.resetInputs(carName, carColor);
+            }
+        });
+    }
+
+    listenRaceBtn() {
+        
+    }
+
+    listenResetBtn() {
+        this.body.addEventListener('click', async (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            const cars: NodeListOf<HTMLElement> = document.querySelectorAll('.move_icon');
+            const startBtns: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.move_start');
+            const stopBtns: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.move_stop');
+            if (target.classList.contains('activity_reset')) {
+                Object.keys(RAFID).forEach(async (id) => {
+                    await this.carModel.stopEngine(+id);
+                    cancelAnimationFrame(RAFID[id]);
+                    cars.forEach((car) => { car.style.transform = ''; });
+                    startBtns.forEach((btn) => { btn.disabled = false; });
+                    stopBtns.forEach((btn) => { btn.disabled = true; });
+                });
             }
         });
     }

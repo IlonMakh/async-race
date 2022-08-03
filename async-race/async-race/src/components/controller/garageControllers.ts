@@ -1,6 +1,8 @@
 import { app } from '../../index';
 import { ICar } from '../../types/index';
-import { PAGE, TOTALCOUNT } from '../constants';
+import {
+    animateCar, PAGE, RAFID, TOTALCOUNT
+} from '../constants';
 import CarModel from '../model/carModel';
 
 export default class GarageControllers {
@@ -11,6 +13,8 @@ export default class GarageControllers {
     drawGarage;
 
     drawNextCar;
+
+    checkDriveStatus;
 
     constructor() {
         this.body = document.body;
@@ -28,6 +32,14 @@ export default class GarageControllers {
             const allCars = await this.carModel.getCars();
             if (allCars[index]) {
                 app.garage.drawCars(allCars[index]);
+            }
+        };
+
+        this.checkDriveStatus = async (id:string) => {
+            const drive = await this.carModel.drive(+id);
+            if (!drive.success) {
+                await this.carModel.stopEngine(+id);
+                cancelAnimationFrame(RAFID[id]);
             }
         };
     }
@@ -60,6 +72,37 @@ export default class GarageControllers {
                 carName.value = selectedCar.name;
                 carColor.value = selectedCar.color;
                 updateBtn.id = `update${selectedCar.id}`;
+            }
+        });
+    }
+
+    listenStart() {
+        this.body.addEventListener('click', async (event: MouseEvent) => {
+            const target = event.target as HTMLButtonElement;
+            if (target.classList.contains('move_start')) {
+                const car: HTMLElement = target.closest('.car') as HTMLElement;
+                const stopEngine: HTMLButtonElement = car.querySelector('.move_stop') as HTMLButtonElement;
+                const move = await this.carModel.startEngine(+car.id);
+                animateCar(car.id, car, move);
+                stopEngine.disabled = false;
+                target.disabled = true;
+                this.checkDriveStatus(car.id);
+            }
+        });
+    }
+
+    listenStop() {
+        this.body.addEventListener('click', async (event: MouseEvent) => {
+            const target = event.target as HTMLButtonElement;
+            if (target.classList.contains('move_stop')) {
+                const car: HTMLElement = target.closest('.car') as HTMLElement;
+                const carImage = car.querySelector('.move_icon') as HTMLElement;
+                const startEngine: HTMLButtonElement = car.querySelector('.move_start') as HTMLButtonElement;
+                await this.carModel.stopEngine(+car.id);
+                cancelAnimationFrame(RAFID[car.id]);
+                startEngine.disabled = false;
+                target.disabled = true;
+                carImage.style.transform = '';
             }
         });
     }

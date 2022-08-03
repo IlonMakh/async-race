@@ -73,6 +73,17 @@
 
 }
 
+.move_start:disabled,
+.move_stop:disabled {
+    border: 2px solid rgb(93, 94, 93);
+    cursor: not-allowed;
+}
+
+.move_start:disabled:hover,
+.move_stop:disabled:hover {
+    background-color: inherit;
+}
+
 .move_start {
     border: 2px solid green;
 }
@@ -90,13 +101,16 @@ background-color: rgb(241, 42, 42);
 }
 
 .move_icon {
-    transform: scaleX(-1);
     align-self: flex-end;
     margin-bottom: -10px;
 }
 
+.move_icon svg {
+    transform: rotateY(180deg);
+}
+
 .move_finish {
-    margin-left: 73vw;
+    margin-left: calc(78vw - 50px);
 }
 
 .move_finish img {
@@ -129,4 +143,9 @@ background-color: rgb(241, 42, 42);
 
 .garage_pagination button:hover {
     background-color: rgb(130, 238, 144);
+}
+
+.garage_pagination button:disabled:hover {
+    background-color: rgb(89, 238, 69);
+    cursor: not-allowed;
 }

@@ -1,12 +1,15 @@
 import {
-    CARS, PAGE, SERVER
+    CARS, ENGINE, PAGE, SERVER
 } from '../constants';
 
 export default class CarModel {
     garage;
 
+    engine;
+
     constructor() {
         this.garage = `${SERVER}${CARS}`;
+        this.engine = `${SERVER}${ENGINE}`;
     }
 
     async getCar(id: number) {
@@ -55,5 +58,28 @@ export default class CarModel {
         });
         const car = await response.json();
         return car;
+    }
+
+    async startEngine(id: number) {
+        const response = await fetch(`${this.engine}?id=${id}&status=started`, {
+            method: 'PATCH'
+        });
+        const start = await response.json();
+        return start;
+    }
+
+    async stopEngine(id: number) {
+        const response = await fetch(`${this.engine}?id=${id}&status=stopped`, {
+            method: 'PATCH'
+        });
+        const stop = await response.json();
+        return stop;
+    }
+
+    async drive(id: number) {
+        const response = await fetch(`${this.engine}?id=${id}&status=drive`, {
+            method: 'PATCH'
+        }).catch();
+        return response.status !== 200 ? { success: false } : { ...(await response.json()) };
     }
 }

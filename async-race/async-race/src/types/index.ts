@@ -12,3 +12,12 @@ export interface IWinner {
     name: string;
     color: string;
 }
+
+export interface IDrive {
+    velocity: number;
+    distance: number;
+}
+
+export type rafid = {
+    [key: string] : number;
+}
