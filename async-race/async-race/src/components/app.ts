@@ -45,6 +45,7 @@ export default class App {
         this.settingsControllers.listenGenerateBtn();
         this.settingsControllers.listenUpdateBtn();
         this.settingsControllers.listenResetBtn();
+        this.settingsControllers.listenRaceBtn();
         this.garageControllers.listenRemoveBtn();
         this.garageControllers.listenSelectBtn();
         this.garageControllers.listenPagination();

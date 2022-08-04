@@ -1,6 +1,7 @@
 import { app } from '../../index';
-import { ICar } from '../../types/index';
+import { ICar, raceData } from '../../types/index';
 import {
+    animateCar,
     RAFID, randomColor, randomName, TOTALCOUNT
 } from '../constants';
 import CarModel from '../model/carModel';
@@ -66,8 +67,28 @@ export default class SettingsControllers {
         });
     }
 
-    listenRaceBtn() {
-        
+    async listenRaceBtn() {
+        this.body.addEventListener('click', async (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            const cars: NodeListOf<HTMLElement> = document.querySelectorAll('.car');
+            if (target.classList.contains('activity_race')) {
+                const finishOrder: raceData[] = [];
+                cars.forEach(async (car) => {
+                    const startBtn = car.querySelector('.move_start') as HTMLButtonElement;
+                    const stopBtn = car.querySelector('.move_stop') as HTMLButtonElement;
+                    const move = await this.carModel.startEngine(+car.id);
+                    const carTime = (move.distance / move.velocity) / 1000;
+                    animateCar(car.id, car, move);
+                    startBtn.disabled = true;
+                    stopBtn.disabled = false;
+                    const carStatus = await app.garageControllers.checkDriveStatus(car.id);
+                    if (carStatus) {
+                        finishOrder.push({ id: car.id, time: +carTime.toFixed(1) });
+                        app.garage.drawWinModal(finishOrder);
+                    }
+                });
+            }
+        });
     }
 
     listenResetBtn() {

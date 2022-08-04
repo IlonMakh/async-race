@@ -1,6 +1,6 @@
 import '../../css/garage.css';
 import { app } from '../../index';
-import { ICar } from '../../types/index';
+import { ICar, raceData } from '../../types/index';
 import { PAGE, TOTALCOUNT } from '../constants';
 import CarModel from '../model/carModel';
 
@@ -70,5 +70,23 @@ export default class GarageView {
             <button class='pagination_next'>next</button>
         </div>`;
         (garage as HTMLElement).insertAdjacentHTML('beforeend', paginationHTML);
+    }
+
+    async drawWinModal(finishOrder: raceData[]) {
+        if (!document.querySelector('.race_winner')) {
+            const winner = finishOrder[0];
+            const winnerInfo = await this.carModel.getCar(+winner.id);
+            const modalHTML = `
+                <div class='race_winner'>
+                    <div class='winner_img'><img src = '../../assets/images/win.png'></div>
+                    <div class='winner_message'>${winnerInfo.name} finished first!<br>Time: ${winner.time} seconds.</div>
+                </div>`;
+            this.body.insertAdjacentHTML('beforeend', modalHTML);
+            const winnerModal = document.querySelector('.race_winner') as HTMLElement;
+
+            setTimeout(() => {
+                this.body.removeChild(winnerModal);
+            }, 8000);
+        }
     }
 }

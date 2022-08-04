@@ -21,3 +21,9 @@ export interface IDrive {
 export type rafid = {
     [key: string] : number;
 }
+
+export type raceData = {
+    id: string;
+    time: number;
+}
+

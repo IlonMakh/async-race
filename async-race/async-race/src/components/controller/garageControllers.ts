@@ -40,7 +40,9 @@ export default class GarageControllers {
             if (!drive.success) {
                 await this.carModel.stopEngine(+id);
                 cancelAnimationFrame(RAFID[id]);
+                return false;
             }
+            return true;
         };
     }
 
