@@ -1,15 +1,17 @@
-import { app } from '../index';
-import {
-    ICar, IDrive, IWinner, rafid
-} from '../types/index';
+import { IDrive, rafid } from '../types/index';
 
 export const SERVER = 'http://127.0.0.1:3000';
 export const CARS = '/garage';
 export const WINNERS = '/winners';
 export const ENGINE = '/engine';
-export const PAGE = { number: 1, limit: 7 };
-export const TOTALCOUNT = async () => {
-    const response = await fetch(`${SERVER}${CARS}?_page=${PAGE.number}&_limit=${PAGE.limit}`);
+export const GPAGE = { number: 1, limit: 7 };
+export const GTOTALCOUNT = async () => {
+    const response = await fetch(`${SERVER}${CARS}?_page=${GPAGE.number}&_limit=${GPAGE.limit}`);
+    return Number(response.headers.get('X-Total-Count'));
+};
+export const WPAGE = { number: 1, limit: 10 };
+export const WTOTALCOUNT = async () => {
+    const response = await fetch(`${SERVER}${WINNERS}?_page=${WPAGE.number}&_limit=${WPAGE.limit}`);
     return Number(response.headers.get('X-Total-Count'));
 };
 const carBrand = [
@@ -184,8 +186,8 @@ const carModel = [
 
 export const randomColor = () => '#' + (Math.random().toString(16) + '000000').substring(2, 8);
 export const randomName = () => {
-    const brandIndex = Math.floor(0 + Math.random() * (carBrand.length + 1 - 0));
-    const modelIndex = Math.floor(0 + Math.random() * (carModel.length + 1 - 0));
+    const brandIndex = Math.floor(Math.random() * (carBrand.length + 1));
+    const modelIndex = Math.floor(Math.random() * (carModel.length + 1));
     return `${carBrand[brandIndex]} ${carModel[modelIndex]}`;
 };
 
@@ -207,31 +209,6 @@ export const animateCar = (id: string, car: HTMLElement, driveParams: IDrive) =>
             }
         };
         move();
-};
-
-/*
-export const GETWINNERS = async () => {
-    const result = await fetch(`${SERVER}${WINNERS}`);
-    const winners = await result.json();
-    return winners.forEach((winner: IWinner) => app.winners.drawWinner(winner));
-}; */
-
-export const GETINFO = async () => {
-    const resultW = await fetch(`${SERVER}${WINNERS}`);
-    const winners = await resultW.json();
-    const resultG = await fetch(`${SERVER}${CARS}`);
-    const cars = await resultG.json();
-    const result = winners.map((winner: IWinner) => {
-        cars.forEach((car:ICar)=> {
-            if (winner.id === car.id) {
-                winner.name = car.name;
-                winner.color = car.color;
-            }
-            return winner;
-        });
-        return winner;
-    });
-    return result.forEach((winner: IWinner) => app.winners.drawWinner(winner));
 };
 
 export default {

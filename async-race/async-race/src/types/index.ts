@@ -9,6 +9,12 @@ export interface IWinner {
     id: number;
     wins: number;
     time: number;
+}
+
+export interface IWinnerInfo {
+    id: number;
+    wins: number;
+    time: number;
     name: string;
     color: string;
 }
@@ -26,4 +32,3 @@ export type raceData = {
     id: string;
     time: number;
 }
-

@@ -1,6 +1,7 @@
 import GarageControllers from './controller/garageControllers';
 import HeaderControllers from './controller/headerControllers';
 import SettingsControllers from './controller/settingsControllers';
+import WinnersControllers from './controller/winnerControllers';
 import GarageView from './view/garageView';
 import HeaderView from './view/headerView';
 import SettingsView from './view/settingsView';
@@ -21,6 +22,8 @@ export default class App {
 
     garageControllers: GarageControllers;
 
+    winnersControllers: WinnersControllers;
+
     constructor() {
         this.header = new HeaderView();
         this.settings = new SettingsView();
@@ -29,13 +32,14 @@ export default class App {
         this.headerControllers = new HeaderControllers();
         this.settingsControllers = new SettingsControllers();
         this.garageControllers = new GarageControllers();
+        this.winnersControllers = new WinnersControllers();
     }
 
     start() {
         this.header.drawHeader();
         this.settings.drawSettings();
         this.garage.drawGarage();
-        this.winners.drawWinners();
+        this.winners.drawWinnersBlock();
     }
 
     listen() {
@@ -51,5 +55,6 @@ export default class App {
         this.garageControllers.listenPagination();
         this.garageControllers.listenStart();
         this.garageControllers.listenStop();
+        this.winnersControllers.listenPagination();
     }
 }

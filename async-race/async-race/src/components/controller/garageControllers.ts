@@ -1,14 +1,17 @@
 import { app } from '../../index';
 import { ICar } from '../../types/index';
 import {
-    animateCar, PAGE, RAFID, TOTALCOUNT
+    animateCar, GPAGE, RAFID, GTOTALCOUNT
 } from '../constants';
 import CarModel from '../model/carModel';
+import WinnerModel from '../model/winnerModel';
 
 export default class GarageControllers {
     body;
 
     carModel: CarModel;
+
+    winnerModel: WinnerModel;
 
     drawGarage;
 
@@ -19,16 +22,17 @@ export default class GarageControllers {
     constructor() {
         this.body = document.body;
         this.carModel = new CarModel();
+        this.winnerModel = new WinnerModel();
         this.drawGarage = async () => {
             const cars: HTMLElement = document.querySelector('.garage_cars') as HTMLElement;
             const garagePage: HTMLElement = document.querySelector('.garage_page') as HTMLInputElement;
             const garage = await this.carModel.getCars();
             cars.innerHTML = '';
-            garagePage.innerHTML = `Page #${PAGE.number}`;
+            garagePage.innerHTML = `Page #${GPAGE.number}`;
             return garage.forEach((item: ICar) => app.garage.drawCars(item));
         };
         this.drawNextCar = async () => {
-            const index: number = PAGE.number * PAGE.limit - 1;
+            const index: number = GPAGE.number * GPAGE.limit - 1;
             const allCars = await this.carModel.getCars();
             if (allCars[index]) {
                 app.garage.drawCars(allCars[index]);
@@ -57,7 +61,14 @@ export default class GarageControllers {
                 cars.removeChild(car);
                 app.garage.checkDisable();
                 this.drawNextCar();
-                garageTitle.innerHTML = `Garage(${await TOTALCOUNT()})`;
+                garageTitle.innerHTML = `Garage(${await GTOTALCOUNT()})`;
+
+                if (document.getElementById(`${car.id}winner`)) {
+                    this.winnerModel.deleteWinner(+car.id);
+                    const winners = document.querySelector('.winners_content') as HTMLElement;
+                    winners.innerHTML = '';
+                    app.winners.drawAllWinners();
+                }
             }
         });
     }
@@ -110,18 +121,18 @@ export default class GarageControllers {
     }
 
     async listenPagination() {
-        const count = await TOTALCOUNT();
+        const count = await GTOTALCOUNT();
         this.body.addEventListener('click', (event: MouseEvent) => {
             const target = event.target as HTMLElement;
             if (target.classList.contains('pagination_prev')) {
-                if (PAGE.number > 1) {
-                    PAGE.number -= 1;
+                if (GPAGE.number > 1) {
+                    GPAGE.number -= 1;
                     this.drawGarage();
                 }
             }
             if (target.classList.contains('pagination_next')) {
-                if (PAGE.number <= Math.ceil(count / PAGE.limit)) {
-                    PAGE.number += 1;
+                if (GPAGE.number <= Math.ceil(count / GPAGE.limit)) {
+                    GPAGE.number += 1;
                     this.drawGarage();
                 }
             }
