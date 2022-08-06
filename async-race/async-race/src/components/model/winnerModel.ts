@@ -14,9 +14,7 @@ export default class WinnerModel {
     }
 
     async getWinner(id: number) {
-        const response = await fetch(`${this.winners}/${id}`, {
-            method: 'GET'
-        });
+        const response = await fetch(`${this.winners}/${id}`);
         const winner = await response.json();
         return winner;
     }

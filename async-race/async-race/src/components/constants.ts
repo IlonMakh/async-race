@@ -186,8 +186,8 @@ const carModel = [
 
 export const randomColor = () => '#' + (Math.random().toString(16) + '000000').substring(2, 8);
 export const randomName = () => {
-    const brandIndex = Math.floor(Math.random() * (carBrand.length + 1));
-    const modelIndex = Math.floor(Math.random() * (carModel.length + 1));
+    const brandIndex = Math.floor(Math.random() * carBrand.length);
+    const modelIndex = Math.floor(Math.random() * carModel.length);
     return `${carBrand[brandIndex]} ${carModel[modelIndex]}`;
 };
 
@@ -196,7 +196,7 @@ export const RAFID: rafid = {};
 export const animateCar = (id: string, car: HTMLElement, driveParams: IDrive) => {
     const elem = car.querySelector('.move_icon') as HTMLElement;
     let currentX = (<HTMLElement>elem).offsetLeft;
-    const endX = window.screen.width - 230;
+    const endX = window.screen.width - 220;
     const duration = (<IDrive>driveParams).distance / (<IDrive>driveParams).velocity;
     const framesCount = (duration / 1000) * 60;
     const dX = (endX - (<HTMLElement>elem).offsetLeft) / framesCount;

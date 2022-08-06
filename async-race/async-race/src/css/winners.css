@@ -32,6 +32,12 @@
     transform: rotateY(180deg);
 }
 
+.wins_header:hover,
+.time_header:hover {
+    cursor: pointer;
+    background-color: rgb(130, 238, 144);
+}
+
 .winners_pagination button {
     width: 70px;
     height: 25px;

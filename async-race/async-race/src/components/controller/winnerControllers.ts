@@ -25,10 +25,28 @@ export default class WinnersControllers {
             });
         };
         }
+/*
+    listenSorting() {
+        this.body.addEventListener('click', async (event: MouseEvent) => {
+            const count = await WTOTALCOUNT();
+            const target = event.target as HTMLElement;
+            if (target.classList.contains('wins_header')) {
+                if (WPAGE.number > 1) {
 
-    async listenPagination() {
-        const count = await WTOTALCOUNT();
-        this.body.addEventListener('click', (event: MouseEvent) => {
+                }
+            }
+            if (target.classList.contains('time_header')) {
+                if (WPAGE.number <= Math.ceil(count / WPAGE.limit)) {
+
+                }
+            }
+        });
+    }
+*/
+
+    listenPagination() {
+        this.body.addEventListener('click', async (event: MouseEvent) => {
+            const count = await WTOTALCOUNT();
             const target = event.target as HTMLElement;
             if (target.classList.contains('winners_prev')) {
                 if (WPAGE.number > 1) {

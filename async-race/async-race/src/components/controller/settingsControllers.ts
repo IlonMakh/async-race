@@ -47,7 +47,8 @@ export default class SettingsControllers {
         };
 
         this.checkWinner = async (winner: raceData) => {
-            if (!document.getElementById(`${winner.id}winner`)) {
+            const result = await this.winnerModel.getWinner(+winner.id);
+            if (Object.keys(result).length === 0) {
                 const createdWinner = await this.winnerModel.createWinner({
                     id: +winner.id,
                     wins: 1,
@@ -65,11 +66,7 @@ export default class SettingsControllers {
                     wins: prevWins + 1,
                     time: prevTime < winner.time ? prevTime : winner.time
                 });
-                const prevWin = document.getElementById(`${winner.id}winner`) as HTMLElement;
-                const winsValue = prevWin.querySelector('.winner_wins') as HTMLElement;
-                const timeValue = prevWin.querySelector('.winner_time') as HTMLElement;
-                winsValue.innerHTML = winnerUpdate.wins;
-                timeValue.innerHTML = `${winnerUpdate.time}s`;
+                app.winners.drawAllWinners();
             }
         };
     }

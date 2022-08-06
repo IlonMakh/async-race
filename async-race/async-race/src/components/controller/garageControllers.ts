@@ -65,8 +65,6 @@ export default class GarageControllers {
 
                 if (document.getElementById(`${car.id}winner`)) {
                     this.winnerModel.deleteWinner(+car.id);
-                    const winners = document.querySelector('.winners_content') as HTMLElement;
-                    winners.innerHTML = '';
                     app.winners.drawAllWinners();
                 }
             }
@@ -120,9 +118,9 @@ export default class GarageControllers {
         });
     }
 
-    async listenPagination() {
-        const count = await GTOTALCOUNT();
-        this.body.addEventListener('click', (event: MouseEvent) => {
+    listenPagination() {
+        this.body.addEventListener('click', async (event: MouseEvent) => {
+            const count = await GTOTALCOUNT();
             const target = event.target as HTMLElement;
             if (target.classList.contains('pagination_prev')) {
                 if (GPAGE.number > 1) {

@@ -84,7 +84,7 @@ export default class GarageView {
             const winnerModal = document.querySelector('.race_winner') as HTMLElement;
 
             setTimeout(() => {
-                this.body.removeChild(winnerModal);
+                (winnerModal.parentNode as ParentNode).removeChild(winnerModal);
             }, 5000);
         }
     }

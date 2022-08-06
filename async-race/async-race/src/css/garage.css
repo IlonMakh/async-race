@@ -109,10 +109,6 @@ background-color: rgb(241, 42, 42);
     transform: rotateY(180deg);
 }
 
-.move_finish {
-    margin-left: calc(78vw - 50px);
-}
-
 .move_finish img {
     width: 50px;
     height: 50px;
@@ -174,3 +170,64 @@ background-color: rgb(241, 42, 42);
     width: 300px;
     height: auto;
 }
+
+@media screen and (max-width:2560px) {
+    .move_finish {
+        margin-left: calc(87vw - 50px);
+    }
+}
+
+@media screen and (max-width:2100px) {
+    .move_finish {
+        margin-left: calc(85vw - 50px);
+    }
+}
+
+@media screen and (max-width:1780px) {
+    .move_finish {
+        margin-left: calc(81vw - 50px);
+    }
+}
+
+@media screen and (max-width:1440px) {
+    .move_finish {
+        margin-left: calc(78vw - 50px);
+    }
+}
+
+@media screen and (max-width:1280px) {
+    .move_finish {
+        margin-left: calc(75vw - 50px);
+    }
+}
+
+@media screen and (max-width:1050px) {
+    .move_finish {
+        margin-left: calc(70vw - 50px);
+    }
+}
+
+@media screen and (max-width:900px) {
+    .move_finish {
+        margin-left: calc(65vw - 50px);
+    }
+}
+
+@media screen and (max-width:767px) {
+    .move_finish {
+        margin-left: calc(60vw - 50px);
+    }
+}
+
+@media screen and (max-width:650px) {
+    .move_finish {
+        margin-left: calc(50vw - 50px);
+    }
+}
+
+@media screen and (max-width:580px) {
+    .move_finish {
+        margin-left: calc(45vw - 50px);
+    }
+}
+
