@@ -19,6 +19,8 @@ export default class GarageControllers {
 
     checkDriveStatus;
 
+    controller: AbortController;
+
     constructor() {
         this.body = document.body;
         this.carModel = new CarModel();
@@ -39,15 +41,20 @@ export default class GarageControllers {
             }
         };
 
-        this.checkDriveStatus = async (id:string) => {
-            const drive = await this.carModel.drive(+id);
-            if (!drive.success) {
-                await this.carModel.stopEngine(+id);
-                cancelAnimationFrame(RAFID[id]);
-                return false;
+        this.checkDriveStatus = async (id:string, signal: AbortSignal) => {
+            const drive = await this.carModel.drive(+id, signal);
+            if (drive) {
+                if (!drive.success) {
+                    await this.carModel.stopEngine(+id);
+                    cancelAnimationFrame(RAFID[id]);
+                    return false;
+                }
+                return true;
             }
-            return true;
+            return false;
         };
+
+        this.controller = new AbortController();
     }
 
     listenRemoveBtn() {
@@ -99,7 +106,7 @@ export default class GarageControllers {
                 animateCar(car.id, car, move);
                 stopEngine.disabled = false;
                 target.disabled = true;
-                this.checkDriveStatus(car.id);
+                this.checkDriveStatus(car.id, this.controller.signal);
             }
         });
     }
@@ -116,6 +123,8 @@ export default class GarageControllers {
                 startEngine.disabled = false;
                 target.disabled = true;
                 carImage.style.transform = '';
+                this.controller.abort();
+                this.controller = new AbortController();
             }
         });
     }

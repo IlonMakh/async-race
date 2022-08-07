@@ -80,10 +80,15 @@ export default class CarModel {
         return stop;
     }
 
-    async drive(id: number) {
-        const response = await fetch(`${this.engine}?id=${id}&status=drive`, {
-            method: 'PATCH'
-        }).catch();
-        return response.status !== 200 ? { success: false } : { ...(await response.json()) };
+    async drive(id: number, cotrollerSignal: AbortSignal) {
+        try {
+            const response = await fetch(`${this.engine}?id=${id}&status=drive`, {
+                method: 'PATCH',
+                signal: cotrollerSignal
+            }).catch();
+            return response.status !== 200 ? { success: false } : { ...(await response.json()) };
+        } catch (err) {
+            return null;
+        }
     }
 }

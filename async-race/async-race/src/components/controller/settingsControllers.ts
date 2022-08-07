@@ -19,6 +19,8 @@ export default class SettingsControllers {
 
     updateWinner;
 
+    controller;
+
     constructor() {
         this.body = document.body;
         this.carModel = new CarModel();
@@ -43,6 +45,8 @@ export default class SettingsControllers {
                 winnerCar.style.fill = `${color.value}`;
             }
         };
+
+        this.controller = new AbortController();
     }
 
     listenCreateBtn() {
@@ -99,7 +103,8 @@ export default class SettingsControllers {
                         animateCar(car.id, car, move);
                         startBtn.disabled = true;
                         stopBtn.disabled = false;
-                        const carStatus = await app.garageControllers.checkDriveStatus(car.id);
+                        const carStatus = await app.garageControllers
+                        .checkDriveStatus(car.id, this.controller.signal);
                         if (carStatus) {
                             finishOrder.push({ id: car.id, time: +carTime.toFixed(1) });
                             stoppedCars = [];
@@ -121,6 +126,7 @@ export default class SettingsControllers {
             const startBtns: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.move_start');
             const stopBtns: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.move_stop');
             if (target.classList.contains('activity_reset')) {
+                this.controller.abort();
                 Object.keys(RAFID).forEach(async (id) => {
                     await this.carModel.stopEngine(+id);
                     cancelAnimationFrame(RAFID[id]);
@@ -134,6 +140,7 @@ export default class SettingsControllers {
                         btn.disabled = true;
                     });
                 });
+                this.controller = new AbortController();
             }
         });
     }
