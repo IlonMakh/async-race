@@ -63,11 +63,11 @@ export default class GarageControllers {
                 this.drawNextCar();
                 garageTitle.innerHTML = `Garage(${await GTOTALCOUNT()})`;
 
-                if (document.getElementById(`${car.id}winner`)) {
+                if (Object.keys(await this.winnerModel.getWinner(+car.id)).length !== 0) {
                     const winnersTitle: HTMLElement = document.querySelector('.winners_title') as HTMLInputElement;
                     this.winnerModel.deleteWinner(+car.id);
-                    app.winners.drawAllWinners();
                     winnersTitle.innerHTML = `Winners(${await WTOTALCOUNT()})`;
+                    app.winners.drawAllWinners();
                 }
             }
         });

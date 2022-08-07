@@ -14,6 +14,7 @@ export const WTOTALCOUNT = async () => {
     const response = await fetch(`${SERVER}${WINNERS}?_page=${WPAGE.number}&_limit=${WPAGE.limit}`);
     return Number(response.headers.get('X-Total-Count'));
 };
+export const SORTING = { sortBy: '', order: '' };
 const carBrand = [
     'Acura',
     'Alfa Romeo',
@@ -196,7 +197,7 @@ export const RAFID: rafid = {};
 export const animateCar = (id: string, car: HTMLElement, driveParams: IDrive) => {
     const elem = car.querySelector('.move_icon') as HTMLElement;
     let currentX = (<HTMLElement>elem).offsetLeft;
-    const endX = window.screen.width - 220;
+    const endX = document.documentElement.clientWidth - 220;
     const duration = (<IDrive>driveParams).distance / (<IDrive>driveParams).velocity;
     const framesCount = (duration / 1000) * 60;
     const dX = (endX - (<HTMLElement>elem).offsetLeft) / framesCount;

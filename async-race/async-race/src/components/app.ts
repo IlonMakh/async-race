@@ -56,5 +56,6 @@ export default class App {
         this.garageControllers.listenStart();
         this.garageControllers.listenStop();
         this.winnersControllers.listenPagination();
+        this.winnersControllers.listenSorting();
     }
 }

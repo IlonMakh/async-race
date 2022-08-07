@@ -3,7 +3,7 @@ import {
     ICar, IWinner, IWinnerInfo, raceData
 } from '../../types/index';
 import {
-    CARS, SERVER, WINNERS, WPAGE, WTOTALCOUNT
+    CARS, SERVER, SORTING, WINNERS, WPAGE, WTOTALCOUNT
 } from '../constants';
 
 export default class WinnerModel {
@@ -29,7 +29,8 @@ export default class WinnerModel {
     }
 
     async getWinners() {
-        const response = await fetch(`${this.winners}?_page=${WPAGE.number}&_limit=${WPAGE.limit}`);
+        const sort = this.setSorting(SORTING.sortBy, SORTING.order);
+        const response = await fetch(`${this.winners}?_page=${WPAGE.number}&_limit=${WPAGE.limit}${sort}`);
         const winners = await response.json();
         return winners;
     }

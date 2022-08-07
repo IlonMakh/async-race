@@ -1,6 +1,6 @@
 import { app } from '../../index';
 import { IWinner } from '../../types/index';
-import { WPAGE, WTOTALCOUNT } from '../constants';
+import { SORTING, WPAGE, WTOTALCOUNT } from '../constants';
 import WinnerModel from '../model/winnerModel';
 
 export default class WinnersControllers {
@@ -25,24 +25,48 @@ export default class WinnersControllers {
             });
         };
         }
-/*
+
     listenSorting() {
+        const timeSorter = document.querySelector('.time_header') as HTMLElement;
+        const winsSorter = document.querySelector('.wins_header') as HTMLElement;
         this.body.addEventListener('click', async (event: MouseEvent) => {
-            const count = await WTOTALCOUNT();
             const target = event.target as HTMLElement;
             if (target.classList.contains('wins_header')) {
-                if (WPAGE.number > 1) {
-
+                timeSorter.innerHTML = 'Best time';
+                if (!target.classList.contains('asc')) {
+                    target.classList.add('asc');
+                    target.innerHTML = 'Wins ↑';
+                    SORTING.sortBy = 'wins';
+                    SORTING.order = 'asc';
+                    app.winners.drawAllWinners();
+                } else {
+                    target.classList.remove('asc');
+                    target.classList.add('desc');
+                    target.innerHTML = 'Wins ↓';
+                    SORTING.sortBy = 'wins';
+                    SORTING.order = 'desc';
+                    app.winners.drawAllWinners();
                 }
             }
             if (target.classList.contains('time_header')) {
-                if (WPAGE.number <= Math.ceil(count / WPAGE.limit)) {
-
+                winsSorter.innerHTML = 'Wins';
+                if (!target.classList.contains('asc')) {
+                    target.classList.add('asc');
+                    target.innerHTML = 'Best time ↑';
+                    SORTING.sortBy = 'time';
+                    SORTING.order = 'asc';
+                    app.winners.drawAllWinners();
+                } else {
+                    target.classList.remove('asc');
+                    target.classList.add('desc');
+                    target.innerHTML = 'Best time ↓';
+                    SORTING.sortBy = 'time';
+                    SORTING.order = 'desc';
+                    app.winners.drawAllWinners();
                 }
             }
         });
     }
-*/
 
     listenPagination() {
         this.body.addEventListener('click', async (event: MouseEvent) => {
