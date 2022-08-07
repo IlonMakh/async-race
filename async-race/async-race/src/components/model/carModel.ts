@@ -21,9 +21,13 @@ export default class CarModel {
     }
 
     async getCars() {
-        const response = await fetch(`${this.garage}?_page=${GPAGE.number}&_limit=${GPAGE.limit}`, {
-            method: 'GET'
-        });
+        const response = await fetch(`${this.garage}?_page=${GPAGE.number}&_limit=${GPAGE.limit}`);
+        const cars = await response.json();
+        return cars;
+    }
+
+    async getAllCars() {
+        const response = await fetch(`${this.garage}`);
         const cars = await response.json();
         return cars;
     }

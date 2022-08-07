@@ -1,7 +1,7 @@
 import { app } from '../../index';
 import { ICar } from '../../types/index';
 import {
-    animateCar, GPAGE, RAFID, GTOTALCOUNT
+    animateCar, GPAGE, RAFID, GTOTALCOUNT, WTOTALCOUNT
 } from '../constants';
 import CarModel from '../model/carModel';
 import WinnerModel from '../model/winnerModel';
@@ -33,7 +33,7 @@ export default class GarageControllers {
         };
         this.drawNextCar = async () => {
             const index: number = GPAGE.number * GPAGE.limit - 1;
-            const allCars = await this.carModel.getCars();
+            const allCars = await this.carModel.getAllCars();
             if (allCars[index]) {
                 app.garage.drawCars(allCars[index]);
             }
@@ -64,8 +64,10 @@ export default class GarageControllers {
                 garageTitle.innerHTML = `Garage(${await GTOTALCOUNT()})`;
 
                 if (document.getElementById(`${car.id}winner`)) {
+                    const winnersTitle: HTMLElement = document.querySelector('.winners_title') as HTMLInputElement;
                     this.winnerModel.deleteWinner(+car.id);
                     app.winners.drawAllWinners();
+                    winnersTitle.innerHTML = `Winners(${await WTOTALCOUNT()})`;
                 }
             }
         });

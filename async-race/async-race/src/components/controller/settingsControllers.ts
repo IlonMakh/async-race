@@ -1,7 +1,7 @@
 import { app } from '../../index';
-import { ICar, IWinner, raceData } from '../../types/index';
+import { ICar, raceData } from '../../types/index';
 import {
-    animateCar, RAFID, randomColor, randomName, GTOTALCOUNT, WTOTALCOUNT
+    animateCar, RAFID, randomColor, randomName, GTOTALCOUNT
 } from '../constants';
 import CarModel from '../model/carModel';
 import WinnerModel from '../model/winnerModel';
@@ -18,8 +18,6 @@ export default class SettingsControllers {
     updateCar;
 
     updateWinner;
-
-    checkWinner;
 
     constructor() {
         this.body = document.body;
@@ -43,30 +41,6 @@ export default class SettingsControllers {
                 const winnerCar = (winner.querySelector('path') as unknown) as HTMLElement;
                 winnerName.innerHTML = `${name.value}`;
                 winnerCar.style.fill = `${color.value}`;
-            }
-        };
-
-        this.checkWinner = async (winner: raceData) => {
-            const result = await this.winnerModel.getWinner(+winner.id);
-            if (Object.keys(result).length === 0) {
-                const createdWinner = await this.winnerModel.createWinner({
-                    id: +winner.id,
-                    wins: 1,
-                    time: winner.time
-                });
-                if ((await WTOTALCOUNT()) <= 10) {
-                    const winnerInfo = await this.winnerModel.getFullWinnerInfo(createdWinner);
-                    app.winners.drawWinner(winnerInfo);
-                }
-            } else {
-                const getWinner: IWinner = await this.winnerModel.getWinner(+winner.id);
-                const prevWins = getWinner.wins;
-                const prevTime = getWinner.time;
-                const winnerUpdate = await this.winnerModel.updateWinner(+winner.id, {
-                    wins: prevWins + 1,
-                    time: prevTime < winner.time ? prevTime : winner.time
-                });
-                app.winners.drawAllWinners();
             }
         };
     }
@@ -115,6 +89,7 @@ export default class SettingsControllers {
             const cars: NodeListOf<HTMLElement> = document.querySelectorAll('.car');
             if (target.classList.contains('activity_race')) {
                 const finishOrder: raceData[] = [];
+                let stoppedCars = [];
                 await Promise.all(
                     Array.from(cars).map(async (car) => {
                         const startBtn = car.querySelector('.move_start') as HTMLButtonElement;
@@ -127,10 +102,11 @@ export default class SettingsControllers {
                         const carStatus = await app.garageControllers.checkDriveStatus(car.id);
                         if (carStatus) {
                             finishOrder.push({ id: car.id, time: +carTime.toFixed(1) });
-                        }
-                        if (finishOrder[0] && finishOrder.length === 1) {
+                            stoppedCars = [];
+                        } else stoppedCars.push(car.id);
+                        if (finishOrder[0] && finishOrder.length === 1 && !stoppedCars.length) {
                             app.garage.drawWinModal(finishOrder[0]);
-                            this.checkWinner(finishOrder[0]);
+                            this.winnerModel.checkWinner(finishOrder[0]);
                         }
                     })
                 );

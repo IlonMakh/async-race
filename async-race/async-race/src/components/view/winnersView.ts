@@ -54,11 +54,13 @@ export default class WinnersView {
     async drawAllWinners() {
         const winnersBlock = document.querySelector('.winners_content') as HTMLElement;
         const winners = await this.winnerModel.getWinners();
-        const fullWinners = await Promise.all(winners.map((winner: IWinner) => {
-            return this.winnerModel.getFullWinnerInfo(winner);
-        }));
         winnersBlock.innerHTML = '';
-        return fullWinners.forEach((winner: IWinnerInfo) => app.winners.drawWinner(winner));
+        if (winners.length) {
+            const fullWinners = await Promise.all(winners.map((winner: IWinner) => {
+                return this.winnerModel.getFullWinnerInfo(winner);
+            }));
+            fullWinners.forEach((winner: IWinnerInfo) => app.winners.drawWinner(winner));
+        }
     }
 
     drawWinner(winner: IWinnerInfo) {

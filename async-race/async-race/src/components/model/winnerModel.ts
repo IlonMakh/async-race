@@ -1,6 +1,9 @@
-import { ICar, IWinner, IWinnerInfo } from '../../types/index';
+import { app } from '../../index';
 import {
-    CARS, SERVER, WINNERS, WPAGE
+    ICar, IWinner, IWinnerInfo, raceData
+} from '../../types/index';
+import {
+    CARS, SERVER, WINNERS, WPAGE, WTOTALCOUNT
 } from '../constants';
 
 export default class WinnerModel {
@@ -8,9 +11,15 @@ export default class WinnerModel {
 
     garage;
 
+    setSorting;
+
     constructor() {
         this.winners = `${SERVER}${WINNERS}`;
         this.garage = `${SERVER}${CARS}`;
+        this.setSorting = (sort: string, order: string) => {
+            if (sort && order) return `&_sort=${sort}&_order=${order}`;
+            return '';
+        };
     }
 
     async getWinner(id: number) {
@@ -20,9 +29,7 @@ export default class WinnerModel {
     }
 
     async getWinners() {
-        const response = await fetch(`${this.winners}?_page=${WPAGE.number}&_limit=${WPAGE.limit}`, {
-            method: 'GET'
-        });
+        const response = await fetch(`${this.winners}?_page=${WPAGE.number}&_limit=${WPAGE.limit}`);
         const winners = await response.json();
         return winners;
     }
@@ -75,5 +82,31 @@ export default class WinnerModel {
         });
         const winner = await response.json();
         return winner;
+    }
+
+    async checkWinner(winner: raceData) {
+        const winnersTitle: HTMLElement = document.querySelector('.winners_title') as HTMLInputElement;
+        const result = await this.getWinner(+winner.id);
+        if (Object.keys(result).length === 0) {
+            const createdWinner = await this.createWinner({
+                id: +winner.id,
+                wins: 1,
+                time: winner.time
+            });
+            if ((await WTOTALCOUNT()) <= 10) {
+                const winnerInfo = await this.getFullWinnerInfo(createdWinner);
+                app.winners.drawWinner(winnerInfo);
+            }
+            app.winners.checkDisable();
+            winnersTitle.innerHTML = `Winners(${await WTOTALCOUNT()})`;
+        } else {
+            const prevWins = result.wins;
+            const prevTime = result.time;
+            await this.updateWinner(+winner.id, {
+                wins: prevWins + 1,
+                time: prevTime < winner.time ? prevTime : winner.time
+            });
+            app.winners.drawAllWinners();
+        }
     }
 }
