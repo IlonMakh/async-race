@@ -1,25 +1,24 @@
 import { app } from '../../index';
 import { ICar, raceData } from '../../types/index';
-import {
-    animateCar, RAFID, randomColor, randomName, GTOTALCOUNT
-} from '../constants';
+import { RAFID } from '../constants';
 import CarModel from '../model/carModel';
 import WinnerModel from '../model/winnerModel';
+import { animateCar, GTOTALCOUNT, randomColor, randomName } from '../utils';
 
 export default class SettingsControllers {
-    body;
+    body: HTMLElement;
 
     carModel: CarModel;
 
     winnerModel: WinnerModel;
 
-    resetInputs;
+    resetInputs: (name: HTMLInputElement, color: HTMLInputElement) => void;
 
-    updateCar;
+    updateCar: (car: HTMLElement, name: HTMLInputElement, color: HTMLInputElement) => void;
 
-    updateWinner;
+    updateWinner: (id: number, name: HTMLInputElement, color: HTMLInputElement) => void;
 
-    controller;
+    controller: AbortController;
 
     constructor() {
         this.body = document.body;
@@ -49,7 +48,7 @@ export default class SettingsControllers {
         this.controller = new AbortController();
     }
 
-    listenCreateBtn() {
+    listenCreateBtn(): void {
         const carName: HTMLInputElement = document.querySelector('.create_input') as HTMLInputElement;
         const carColor: HTMLInputElement = document.querySelector('.create_color') as HTMLInputElement;
         const garageTitle: HTMLElement = document.querySelector('.garage_title') as HTMLInputElement;
@@ -58,7 +57,7 @@ export default class SettingsControllers {
             if (target.classList.contains('create_btn')) {
                 const newCar = await this.carModel.createCar({
                     name: carName.value,
-                    color: carColor.value
+                    color: carColor.value,
                 });
                 if ((await GTOTALCOUNT()) <= 7) {
                     app.garage.drawCars(newCar);
@@ -70,7 +69,7 @@ export default class SettingsControllers {
         });
     }
 
-    listenUpdateBtn() {
+    listenUpdateBtn(): void {
         const carName: HTMLInputElement = document.querySelector('.update_input') as HTMLInputElement;
         const carColor: HTMLInputElement = document.querySelector('.update_color') as HTMLInputElement;
         this.body.addEventListener('click', async (event: MouseEvent) => {
@@ -87,7 +86,7 @@ export default class SettingsControllers {
         });
     }
 
-    async listenRaceBtn() {
+    async listenRaceBtn(): Promise<void> {
         this.body.addEventListener('click', async (event: MouseEvent) => {
             const target = event.target as HTMLElement;
             const cars: NodeListOf<HTMLElement> = document.querySelectorAll('.car');
@@ -103,8 +102,7 @@ export default class SettingsControllers {
                         animateCar(car.id, car, move);
                         startBtn.disabled = true;
                         stopBtn.disabled = false;
-                        const carStatus = await app.garageControllers
-                        .checkDriveStatus(car.id, this.controller.signal);
+                        const carStatus = await app.garageControllers.checkDriveStatus(car.id, this.controller.signal);
                         if (carStatus) {
                             finishOrder.push({ id: car.id, time: +carTime.toFixed(1) });
                             stoppedCars = [];
@@ -119,7 +117,7 @@ export default class SettingsControllers {
         });
     }
 
-    listenResetBtn() {
+    listenResetBtn(): void {
         this.body.addEventListener('click', async (event: MouseEvent) => {
             const target = event.target as HTMLElement;
             const cars: NodeListOf<HTMLElement> = document.querySelectorAll('.move_icon');
@@ -145,7 +143,7 @@ export default class SettingsControllers {
         });
     }
 
-    listenGenerateBtn() {
+    listenGenerateBtn(): void {
         const garageTitle: HTMLElement = document.querySelector('.garage_title') as HTMLInputElement;
         this.body.addEventListener('click', async (event: MouseEvent) => {
             const target = event.target as HTMLElement;
@@ -155,7 +153,7 @@ export default class SettingsControllers {
                 for (let i = 1; i <= 100; i += 1) {
                     const car = this.carModel.createCar({
                         name: randomName(),
-                        color: randomColor()
+                        color: randomColor(),
                     });
                     createdCars.push(car);
                 }

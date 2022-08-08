@@ -18,7 +18,9 @@
     ],
     "rules": {
         "indent": "off",
-        "no-console": "off",
+        "object-curly-newline": "off",
+        "max-len" :"off",
+        "comma-dangle": "off",
         "no-param-reassign": "off"
     }
 }

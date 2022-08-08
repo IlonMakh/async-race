@@ -1,11 +1,11 @@
 export default class HeaderControllers {
-    body;
+    body: HTMLElement;
 
     constructor() {
         this.body = document.body;
     }
 
-    addListenerGarage() {
+    addListenerGarage(): void {
         const garage: HTMLElement = document.querySelector('.garage') as HTMLElement;
         const winners: HTMLElement = document.querySelector('.winners') as HTMLElement;
         const settings: HTMLElement = document.querySelector('.settings') as HTMLElement;
@@ -19,7 +19,7 @@ export default class HeaderControllers {
         });
     }
 
-    addListenerWinners() {
+    addListenerWinners(): void {
         const garage: HTMLElement = document.querySelector('.garage') as HTMLElement;
         const winners: HTMLElement = document.querySelector('.winners') as HTMLElement;
         const settings: HTMLElement = document.querySelector('.settings') as HTMLElement;

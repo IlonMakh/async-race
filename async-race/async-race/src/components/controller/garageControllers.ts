@@ -1,23 +1,22 @@
 import { app } from '../../index';
 import { ICar } from '../../types/index';
-import {
-    animateCar, GPAGE, RAFID, GTOTALCOUNT, WTOTALCOUNT
-} from '../constants';
+import { GPAGE, RAFID } from '../constants';
 import CarModel from '../model/carModel';
 import WinnerModel from '../model/winnerModel';
+import { animateCar, GTOTALCOUNT, WTOTALCOUNT } from '../utils';
 
 export default class GarageControllers {
-    body;
+    body: HTMLElement;
 
     carModel: CarModel;
 
     winnerModel: WinnerModel;
 
-    drawGarage;
+    drawGarage: () => Promise<void>;
 
-    drawNextCar;
+    drawNextCar: () => Promise<void>;
 
-    checkDriveStatus;
+    checkDriveStatus: (id: string, signal: AbortSignal) => Promise<boolean>;
 
     controller: AbortController;
 
@@ -41,7 +40,7 @@ export default class GarageControllers {
             }
         };
 
-        this.checkDriveStatus = async (id:string, signal: AbortSignal) => {
+        this.checkDriveStatus = async (id: string, signal: AbortSignal) => {
             const drive = await this.carModel.drive(+id, signal);
             if (drive) {
                 if (!drive.success) {
@@ -57,7 +56,7 @@ export default class GarageControllers {
         this.controller = new AbortController();
     }
 
-    listenRemoveBtn() {
+    listenRemoveBtn(): void {
         const cars: HTMLElement = document.querySelector('.garage_cars') as HTMLElement;
         const garageTitle: HTMLElement = document.querySelector('.garage_title') as HTMLInputElement;
         this.body.addEventListener('click', async (event: MouseEvent) => {
@@ -80,7 +79,7 @@ export default class GarageControllers {
         });
     }
 
-    listenSelectBtn() {
+    listenSelectBtn(): void {
         const carName: HTMLInputElement = document.querySelector('.update_input') as HTMLInputElement;
         const carColor: HTMLInputElement = document.querySelector('.update_color') as HTMLInputElement;
         const updateBtn: HTMLInputElement = document.querySelector('.update_btn') as HTMLInputElement;
@@ -96,7 +95,7 @@ export default class GarageControllers {
         });
     }
 
-    listenStart() {
+    listenStart(): void {
         this.body.addEventListener('click', async (event: MouseEvent) => {
             const target = event.target as HTMLButtonElement;
             if (target.classList.contains('move_start')) {
@@ -111,7 +110,7 @@ export default class GarageControllers {
         });
     }
 
-    listenStop() {
+    listenStop(): void {
         this.body.addEventListener('click', async (event: MouseEvent) => {
             const target = event.target as HTMLButtonElement;
             if (target.classList.contains('move_stop')) {
@@ -129,7 +128,7 @@ export default class GarageControllers {
         });
     }
 
-    listenPagination() {
+    listenPagination(): void {
         this.body.addEventListener('click', async (event: MouseEvent) => {
             const count = await GTOTALCOUNT();
             const target = event.target as HTMLElement;

@@ -7,7 +7,7 @@ export default class SettingsView {
         this.body = document.body;
     }
 
-    drawSettings() {
+    drawSettings(): void {
         const settingsHTML = `
             <div class='settings'>
                 <div class='settings_create'>

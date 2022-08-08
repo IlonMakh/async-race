@@ -1,15 +1,16 @@
 import '../../css/winners.css';
 import { app } from '../../index';
 import { IWinner, IWinnerInfo } from '../../types/index';
-import { WPAGE, WTOTALCOUNT } from '../constants';
+import { WPAGE } from '../constants';
 import WinnerModel from '../model/winnerModel';
+import { WTOTALCOUNT } from '../utils';
 
 export default class WinnersView {
     body: HTMLElement;
 
     winnerModel: WinnerModel;
 
-    checkDisable;
+    checkDisable: () => Promise<void>;
 
     constructor() {
         this.body = document.body;
@@ -23,7 +24,7 @@ export default class WinnersView {
         };
     }
 
-    drawWinnersBlock() {
+    drawWinnersBlock(): void {
         const winnersHTML = `
         <div class='winners hide'>
             <h3 class='winners_title'></h3>
@@ -51,19 +52,21 @@ export default class WinnersView {
         app.winners.drawPagination();
     }
 
-    async drawAllWinners() {
+    async drawAllWinners(): Promise<void> {
         const winnersBlock = document.querySelector('.winners_content') as HTMLElement;
         const winners = await this.winnerModel.getWinners();
         winnersBlock.innerHTML = '';
         if (winners.length) {
-            const fullWinners = await Promise.all(winners.map((winner: IWinner) => {
-                return this.winnerModel.getFullWinnerInfo(winner);
-            }));
+            const fullWinners = await Promise.all(
+                winners.map((winner: IWinner) => {
+                    return this.winnerModel.getFullWinnerInfo(winner);
+                })
+            );
             fullWinners.forEach((winner: IWinnerInfo) => app.winners.drawWinner(winner));
         }
     }
 
-    drawWinner(winner: IWinnerInfo) {
+    drawWinner(winner: IWinnerInfo): void {
         const table = this.body.querySelector('.winners_content');
         const count = this.body.querySelectorAll('.winner').length;
         const num = WPAGE.limit * (WPAGE.number - 1) + count + 1;
@@ -80,7 +83,7 @@ export default class WinnersView {
         this.checkDisable();
     }
 
-    drawPagination() {
+    drawPagination(): void {
         const winners = this.body.querySelector('.winners');
         const paginationHTML = `
         <div class='winners_pagination'>

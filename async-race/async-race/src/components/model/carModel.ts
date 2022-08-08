@@ -1,80 +1,77 @@
-import {
-    CARS, ENGINE, GPAGE, SERVER
-} from '../constants';
+import { ICar, IDrive } from '../../types/index';
+import { CARS, ENGINE, GPAGE, SERVER } from '../constants';
 
 export default class CarModel {
-    garage;
+    garage: string;
 
-    engine;
+    engine: string;
 
     constructor() {
         this.garage = `${SERVER}${CARS}`;
         this.engine = `${SERVER}${ENGINE}`;
     }
 
-    async getCar(id: number) {
-        const response = await fetch(`${this.garage}/${id}`, {
-            method: 'GET'
-        });
+    async getCar(id: number): Promise<ICar> {
+        const response = await fetch(`${this.garage}/${id}`);
         const car = await response.json();
         return car;
     }
 
-    async getCars() {
+    async getCars(): Promise<ICar[]> {
         const response = await fetch(`${this.garage}?_page=${GPAGE.number}&_limit=${GPAGE.limit}`);
         const cars = await response.json();
         return cars;
     }
 
-    async getAllCars() {
+    async getAllCars(): Promise<ICar[]> {
         const response = await fetch(`${this.garage}`);
         const cars = await response.json();
         return cars;
     }
 
-    async createCar(body: object) {
+    async createCar(body: object): Promise<ICar> {
         const response = await fetch(this.garage, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         });
         const car = await response.json();
         return car;
     }
 
-    async updateCar(id: number, body: object) {
+    async updateCar(id: number, body: object): Promise<ICar> {
         const response = await fetch(`${this.garage}/${id}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         });
         const car = await response.json();
         return car;
     }
 
-    async deleteCar(id: number) {
+    async deleteCar(id: number): Promise<ICar> {
         const response = await fetch(`${this.garage}/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
         const car = await response.json();
         return car;
     }
 
-    async startEngine(id: number) {
+    async startEngine(id: number): Promise<IDrive> {
         const response = await fetch(`${this.engine}?id=${id}&status=started`, {
-            method: 'PATCH'
+            method: 'PATCH',
         });
         const start = await response.json();
         return start;
     }
 
-    async stopEngine(id: number) {
+    async stopEngine(id: number): Promise<void> {
         const response = await fetch(`${this.engine}?id=${id}&status=stopped`, {
-            method: 'PATCH'
+            method: 'PATCH',
         });
         const stop = await response.json();
         return stop;
@@ -84,7 +81,7 @@ export default class CarModel {
         try {
             const response = await fetch(`${this.engine}?id=${id}&status=drive`, {
                 method: 'PATCH',
-                signal: cotrollerSignal
+                signal: cotrollerSignal,
             }).catch();
             return response.status !== 200 ? { success: false } : { ...(await response.json()) };
         } catch (err) {

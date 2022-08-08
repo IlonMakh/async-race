@@ -53,7 +53,7 @@
 
 .car_move {
     display: flex;
-    gap:5px;
+    gap: 5px;
     align-items: flex-start;
     height: 50px;
 }
@@ -70,7 +70,6 @@
     cursor: pointer;
     background-color: inherit;
     color: white;
-
 }
 
 .move_start:disabled,
@@ -97,7 +96,7 @@
 }
 
 .move_stop:hover {
-background-color: rgb(241, 42, 42);
+    background-color: rgb(241, 42, 42);
 }
 
 .move_icon {
@@ -171,63 +170,62 @@ background-color: rgb(241, 42, 42);
     height: auto;
 }
 
-@media screen and (max-width:2560px) {
+@media screen and (max-width: 2560px) {
     .move_finish {
         margin-left: calc(87vw - 50px);
     }
 }
 
-@media screen and (max-width:2100px) {
+@media screen and (max-width: 2100px) {
     .move_finish {
         margin-left: calc(85vw - 50px);
     }
 }
 
-@media screen and (max-width:1780px) {
+@media screen and (max-width: 1780px) {
     .move_finish {
         margin-left: calc(81vw - 50px);
     }
 }
 
-@media screen and (max-width:1440px) {
+@media screen and (max-width: 1440px) {
     .move_finish {
         margin-left: calc(78vw - 50px);
     }
 }
 
-@media screen and (max-width:1280px) {
+@media screen and (max-width: 1280px) {
     .move_finish {
         margin-left: calc(75vw - 50px);
     }
 }
 
-@media screen and (max-width:1050px) {
+@media screen and (max-width: 1050px) {
     .move_finish {
         margin-left: calc(70vw - 50px);
     }
 }
 
-@media screen and (max-width:900px) {
+@media screen and (max-width: 900px) {
     .move_finish {
         margin-left: calc(65vw - 50px);
     }
 }
 
-@media screen and (max-width:767px) {
+@media screen and (max-width: 767px) {
     .move_finish {
         margin-left: calc(60vw - 50px);
     }
 }
 
-@media screen and (max-width:650px) {
+@media screen and (max-width: 650px) {
     .move_finish {
         margin-left: calc(50vw - 50px);
     }
 }
 
-@media screen and (max-width:580px) {
+@media screen and (max-width: 580px) {
     .move_finish {
         margin-left: calc(45vw - 50px);
     }
 }
-

@@ -1,15 +1,16 @@
 import '../../css/garage.css';
 import { app } from '../../index';
 import { ICar, raceData } from '../../types/index';
-import { GPAGE, GTOTALCOUNT } from '../constants';
+import { GPAGE } from '../constants';
 import CarModel from '../model/carModel';
+import { GTOTALCOUNT } from '../utils';
 
 export default class GarageView {
     body: HTMLElement;
 
-    carModel;
+    carModel: CarModel;
 
-    checkDisable;
+    checkDisable: () => Promise<void>;
 
     constructor() {
         this.body = document.body;
@@ -23,7 +24,7 @@ export default class GarageView {
         };
     }
 
-    drawGarage() {
+    drawGarage(): void {
         const garageHTML = `
         <div class='garage'>
             <h3 class='garage_title'></h3>
@@ -32,7 +33,7 @@ export default class GarageView {
         </div>
         `;
         this.body.insertAdjacentHTML('beforeend', garageHTML);
-            window.addEventListener('DOMContentLoaded', async () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             const garageTitle: HTMLElement = document.querySelector('.garage_title') as HTMLElement;
             const cars = await this.carModel.getCars();
             garageTitle.insertAdjacentHTML('beforeend', `Garage(${await GTOTALCOUNT()})`);
@@ -41,7 +42,7 @@ export default class GarageView {
         app.garage.drawPagination();
     }
 
-    drawCars(car: ICar) {
+    drawCars(car: ICar): void {
         const cars = this.body.querySelector('.garage_cars');
         const carHTML = `
         <div class='car' id='${car.id}'>
@@ -62,7 +63,7 @@ export default class GarageView {
         this.checkDisable();
     }
 
-    async drawPagination() {
+    drawPagination(): void {
         const garage = this.body.querySelector('.garage');
         const paginationHTML = `
         <div class='garage_pagination'>
@@ -72,7 +73,7 @@ export default class GarageView {
         (garage as HTMLElement).insertAdjacentHTML('beforeend', paginationHTML);
     }
 
-    async drawWinModal(winner: raceData) {
+    async drawWinModal(winner: raceData): Promise<void> {
         if (!document.querySelector('.race_winner')) {
             const winnerInfo = await this.carModel.getCar(+winner.id);
             const modalHTML = `
@@ -82,9 +83,9 @@ export default class GarageView {
                 </div>`;
             this.body.insertAdjacentHTML('beforeend', modalHTML);
             const winnerModal = document.querySelector('.race_winner') as HTMLElement;
-                setTimeout(() => {
-                    (winnerModal.parentNode as ParentNode).removeChild(winnerModal);
-                }, 5000);
+            setTimeout(() => {
+                (winnerModal.parentNode as ParentNode).removeChild(winnerModal);
+            }, 5000);
         }
     }
 }

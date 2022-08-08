@@ -2,7 +2,6 @@ export interface ICar {
     name: string;
     color: string;
     id: number;
-
 }
 
 export interface IWinner {
@@ -25,10 +24,20 @@ export interface IDrive {
 }
 
 export type rafid = {
-    [key: string] : number;
-}
+    [key: string]: number;
+};
 
 export type raceData = {
     id: string;
     time: number;
-}
+};
+
+export type page = {
+    number: number;
+    limit: number;
+};
+
+export type sorting = {
+    sortBy: string;
+    order: string;
+};

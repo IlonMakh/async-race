@@ -1,12 +1,13 @@
 import { app } from '../../index';
 import { IWinner } from '../../types/index';
-import { SORTING, WPAGE, WTOTALCOUNT } from '../constants';
+import { SORTING, WPAGE } from '../constants';
 import WinnerModel from '../model/winnerModel';
+import { WTOTALCOUNT } from '../utils';
 
 export default class WinnersControllers {
-    body;
+    body: HTMLElement;
 
-    drawWinnersPage;
+    drawWinnersPage: () => Promise<void>;
 
     winnerModel: WinnerModel;
 
@@ -24,9 +25,9 @@ export default class WinnersControllers {
                 app.winners.drawWinner(winnerInfo);
             });
         };
-        }
+    }
 
-    listenSorting() {
+    listenSorting(): void {
         const timeSorter = document.querySelector('.time_header') as HTMLElement;
         const winsSorter = document.querySelector('.wins_header') as HTMLElement;
         this.body.addEventListener('click', async (event: MouseEvent) => {
@@ -68,7 +69,7 @@ export default class WinnersControllers {
         });
     }
 
-    listenPagination() {
+    listenPagination(): void {
         this.body.addEventListener('click', async (event: MouseEvent) => {
             const count = await WTOTALCOUNT();
             const target = event.target as HTMLElement;

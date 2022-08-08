@@ -7,7 +7,7 @@ export default class HeaderView {
         this.body = document.body;
     }
 
-    drawHeader() {
+    drawHeader(): void {
         const headerHTML = `
             <header>
                 <button class='header_garage'>to garage</button>

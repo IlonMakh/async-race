@@ -1,17 +1,14 @@
 import { app } from '../../index';
-import {
-    ICar, IWinner, IWinnerInfo, raceData
-} from '../../types/index';
-import {
-    CARS, SERVER, SORTING, WINNERS, WPAGE, WTOTALCOUNT
-} from '../constants';
+import { ICar, IWinner, IWinnerInfo, raceData } from '../../types/index';
+import { CARS, SERVER, SORTING, WINNERS, WPAGE } from '../constants';
+import { WTOTALCOUNT } from '../utils';
 
 export default class WinnerModel {
-    winners;
+    winners: string;
 
-    garage;
+    garage: string;
 
-    setSorting;
+    setSorting: (sort: string, order: string) => string;
 
     constructor() {
         this.winners = `${SERVER}${WINNERS}`;
@@ -22,56 +19,60 @@ export default class WinnerModel {
         };
     }
 
-    async getWinner(id: number) {
+    async getWinner(id: number): Promise<IWinner> {
         const response = await fetch(`${this.winners}/${id}`);
         const winner = await response.json();
         return winner;
     }
 
-    async getWinners() {
+    async getWinners(): Promise<IWinner[]> {
         const sort = this.setSorting(SORTING.sortBy, SORTING.order);
         const response = await fetch(`${this.winners}?_page=${WPAGE.number}&_limit=${WPAGE.limit}${sort}`);
         const winners = await response.json();
         return winners;
     }
 
-    async getFullWinnerInfo(winner: IWinner) {
+    async getFullWinnerInfo(winner: IWinner): Promise<IWinnerInfo> {
         const resultG = await fetch(`${this.garage}`);
         const cars = await resultG.json();
         const fullWinner: IWinnerInfo = {
-            id: 0, name: '', color: '', wins: 0, time: 0
+            id: 0,
+            name: '',
+            color: '',
+            wins: 0,
+            time: 0,
         };
-            cars.forEach((car:ICar)=> {
-                if (winner.id === car.id) {
-                    fullWinner.id = car.id;
-                    fullWinner.name = car.name;
-                    fullWinner.color = car.color;
-                    fullWinner.wins = winner.wins;
-                    fullWinner.time = winner.time;
-                }
+        cars.forEach((car: ICar) => {
+            if (winner.id === car.id) {
+                fullWinner.id = car.id;
+                fullWinner.name = car.name;
+                fullWinner.color = car.color;
+                fullWinner.wins = winner.wins;
+                fullWinner.time = winner.time;
+            }
         });
         return fullWinner;
     }
 
-    async createWinner(body: IWinner) {
+    async createWinner(body: IWinner): Promise<IWinner> {
         const response = await fetch(this.winners, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         });
         const winner = await response.json();
         return winner;
     }
 
-    async updateWinner(id: number, body: object) {
+    async updateWinner(id: number, body: object): Promise<IWinner> {
         const response = await fetch(`${this.winners}/${id}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         });
         const winner = await response.json();
         return winner;
@@ -79,20 +80,20 @@ export default class WinnerModel {
 
     async deleteWinner(id: number) {
         const response = await fetch(`${this.winners}/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
         const winner = await response.json();
         return winner;
     }
 
-    async checkWinner(winner: raceData) {
+    async checkWinner(winner: raceData): Promise<void> {
         const winnersTitle: HTMLElement = document.querySelector('.winners_title') as HTMLInputElement;
         const result = await this.getWinner(+winner.id);
-        if (Object.keys(result).length === 0) {
+        if (!Object.keys(result).length) {
             const createdWinner = await this.createWinner({
                 id: +winner.id,
                 wins: 1,
-                time: winner.time
+                time: winner.time,
             });
             if ((await WTOTALCOUNT()) <= 10) {
                 const winnerInfo = await this.getFullWinnerInfo(createdWinner);
@@ -105,7 +106,7 @@ export default class WinnerModel {
             const prevTime = result.time;
             await this.updateWinner(+winner.id, {
                 wins: prevWins + 1,
-                time: prevTime < winner.time ? prevTime : winner.time
+                time: prevTime < winner.time ? prevTime : winner.time,
             });
             app.winners.drawAllWinners();
         }

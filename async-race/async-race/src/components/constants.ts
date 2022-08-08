@@ -1,21 +1,14 @@
-import { IDrive, rafid } from '../types/index';
+import { page, rafid, sorting } from '../types/index';
 
 export const SERVER = 'http://127.0.0.1:3000';
 export const CARS = '/garage';
 export const WINNERS = '/winners';
 export const ENGINE = '/engine';
-export const GPAGE = { number: 1, limit: 7 };
-export const GTOTALCOUNT = async () => {
-    const response = await fetch(`${SERVER}${CARS}?_page=${GPAGE.number}&_limit=${GPAGE.limit}`);
-    return Number(response.headers.get('X-Total-Count'));
-};
-export const WPAGE = { number: 1, limit: 10 };
-export const WTOTALCOUNT = async () => {
-    const response = await fetch(`${SERVER}${WINNERS}?_page=${WPAGE.number}&_limit=${WPAGE.limit}`);
-    return Number(response.headers.get('X-Total-Count'));
-};
-export const SORTING = { sortBy: '', order: '' };
-const carBrand = [
+export const GPAGE: page = { number: 1, limit: 7 };
+export const WPAGE: page = { number: 1, limit: 10 };
+export const SORTING: sorting = { sortBy: '', order: '' };
+export const RAFID: rafid = {};
+export const carBrand: string[] = [
     'Acura',
     'Alfa Romeo',
     'Alpine',
@@ -122,9 +115,10 @@ const carBrand = [
     'Volkswagen',
     'Volvo',
     'Xpeng',
-    'Zotye'
+    'Zotye',
 ];
-const carModel = [
+
+export const carModel: string[] = [
     'Durango',
     'Ram',
     'Challenger',
@@ -182,38 +176,5 @@ const carModel = [
     'RAV4',
     'Rio',
     'Creta',
-    'Solaris'
+    'Solaris',
 ];
-
-export const randomColor = () => '#' + (Math.random().toString(16) + '000000').substring(2, 8);
-export const randomName = () => {
-    const brandIndex = Math.floor(Math.random() * carBrand.length);
-    const modelIndex = Math.floor(Math.random() * carModel.length);
-    return `${carBrand[brandIndex]} ${carModel[modelIndex]}`;
-};
-
-export const RAFID: rafid = {};
-
-export const animateCar = (id: string, car: HTMLElement, driveParams: IDrive) => {
-    const elem = car.querySelector('.move_icon') as HTMLElement;
-    let currentX = (<HTMLElement>elem).offsetLeft;
-    const endX = document.documentElement.clientWidth - 220;
-    const duration = (<IDrive>driveParams).distance / (<IDrive>driveParams).velocity;
-    const framesCount = (duration / 1000) * 60;
-    const dX = (endX - (<HTMLElement>elem).offsetLeft) / framesCount;
-
-        const move = () => {
-            currentX += dX;
-            elem.style.transform = `translateX(${currentX}px)`;
-            if (currentX < endX) {
-                RAFID[`${id}`] = requestAnimationFrame(move);
-            }
-        };
-        move();
-};
-
-export default {
-    SERVER,
-    CARS,
-    WINNERS
-};
