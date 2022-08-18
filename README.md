@@ -1,11 +1,3 @@
-# ilonmakh-JSFE2022Q1
-Private repository for @ilonmakh
+https://rolling-scopes-school.github.io/ilonmakh-JSFE2022Q1/async-race/
 
-## Telegram: @xxmorf
-## Discord: ilona(@ilonmakh)
-
-
-### Список выполненных заданий: 
-
-#### 1. Shelter.Desktop 
-
+Для работы приложения необходимо локально запустить следующий сервер: https://github.com/mikhama/async-race-api
